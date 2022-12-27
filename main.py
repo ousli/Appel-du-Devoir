@@ -1,7 +1,8 @@
-from ursina.prefabs.health_bar import HealthBar
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
+from ursina.prefabs.health_bar import HealthBar
 from ursina.shaders import colored_lights_shader
+from ursina.shaders import basic_lighting_shader
 from random import randint
 
 app = Ursina()
@@ -82,14 +83,13 @@ for i in range(len(map)):
                    z=j*2,
                    collider='box',
                    scale_y=3,
-                   color=color.hsv(0, 0, random.uniform(.9, 1))
-                   #    ,shader=ssao_shader
+                   color=color.hsv(0, 0, random.uniform(.9, 1)), shader=basic_lighting_shader
                    )
         if map[i][j] == 0:
             jkfne = randint(0, 10)
             if jkfne == 3:
                 enemies.append(Enemy(x=i*2, z=j*2))
-Enemy()
+# Enemy()
 # enemies=[Enemy(x=x*4) for x in range(4)]
 
 
@@ -103,14 +103,14 @@ def shoot():
         # print('shoot')
         gun.on_cooldown = True
         gun.muzzle_flash.enabled = True
-        from ursina.prefabs.ursfx import ursfx
-        ursfx([(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)], volume=0.5,
-              wave='noise', pitch=random.uniform(-13, -12), pitch_change=-12, speed=3.0)
-        invoke(gun.muzzle_flash.disable, delay=.05)
-        invoke(setattr, gun, 'on_cooldown', False, delay=.15)
-        if mouse.hovered_entity and hasattr(mouse.hovered_entity, 'hp'):
-            mouse.hovered_entity.hp -= 10
-            mouse.hovered_entity.blink(color.red)
+    from ursina.prefabs.ursfx import ursfx
+    ursfx([(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)], volume=0.5,
+          wave='noise', pitch=random.uniform(-13, -12), pitch_change=-12, speed=3.0)
+    invoke(gun.muzzle_flash.disable, delay=.05)
+    invoke(setattr, gun, 'on_cooldown', False, delay=.15)
+    if mouse.hovered_entity and hasattr(mouse.hovered_entity, 'hp'):
+        mouse.hovered_entity.hp -= 10
+        mouse.hovered_entity.blink(color.red)
 
 
 def pause_input(key):
