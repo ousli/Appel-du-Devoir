@@ -23,15 +23,15 @@ class Labyrinthe:
             if top == self._UNVISITED:
                 neightbors.append((map_x, map_y-2))
         if map_x < self._width-2:
-            right = self._map[map_x+1][map_y]
+            right = self._map[map_x+2][map_y]
             if right == self._UNVISITED:
                 neightbors.append((map_x+2, map_y))
         if map_x > 1:
-            left = self._map[map_x-1][map_y]
+            left = self._map[map_x-2][map_y]
             if left == self._UNVISITED:
                 neightbors.append((map_x-2, map_y))
         if map_y < self._height-2:
-            bottom = self._map[map_x][map_y+1]
+            bottom = self._map[map_x][map_y+2]
             if bottom == self._UNVISITED:
                 neightbors.append((map_x, map_y+2))
         #     ###############

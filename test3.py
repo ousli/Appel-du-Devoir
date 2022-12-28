@@ -1,213 +1,213 @@
-from random import randint
+from random import randint, choice
 
 
-WALL = 1
-CELL = 0
-UNVISITED = 2
+MUR = 1
+CASE = 0
+PAS_VISITE = 2
 HEIGHT = 20
 WIDTH = 20
-maze = [[UNVISITED for j in range(WIDTH)] for i in range(WIDTH)]
+laby = [[PAS_VISITE for j in range(WIDTH)] for i in range(WIDTH)]
 
 
-def surroundingCells(rand_wall):
-    s_cells = 0
-    if maze[rand_wall[0]-1][rand_wall[1]] == CELL:
-        s_cells += 1
-    if maze[rand_wall[0]+1][rand_wall[1]] == CELL:
-        s_cells += 1
-    if maze[rand_wall[0]][rand_wall[1]-1] == CELL:
-        s_cells += 1
-    if maze[rand_wall[0]][rand_wall[1]+1] == CELL:
-        s_cells += 1
+def compter_cellules(prochain_mur):
+    nb_cases = 0
+    if laby[prochain_mur[0]-1][prochain_mur[1]] == CASE:
+        nb_cases += 1
+    if laby[prochain_mur[0]+1][prochain_mur[1]] == CASE:
+        nb_cases += 1
+    if laby[prochain_mur[0]][prochain_mur[1]-1] == CASE:
+        nb_cases += 1
+    if laby[prochain_mur[0]][prochain_mur[1]+1] == CASE:
+        nb_cases += 1
 
-    return s_cells
+    return nb_cases
 
 
 # Randomize starting point and set it a cell
-starting_height = randint(1, HEIGHT-2)
-starting_width = randint(1, WIDTH-2)
+case_depart = (randint(1, HEIGHT-2), randint(1, WIDTH-2))
+# case_depart[0] = randint(1, HEIGHT-2)
+# case_depart[1] = randint(1, WIDTH-2)
 
-# Mark it as cell and add surrounding walls to the list
-maze[starting_height][starting_width] = CELL
-walls = []
-walls.append([starting_height - 1, starting_width])
-walls.append([starting_height, starting_width - 1])
-walls.append([starting_height, starting_width + 1])
-walls.append([starting_height + 1, starting_width])
+# Mark it as cell and add surrounding liste_mur to the list
+laby[case_depart[0]][case_depart[1]] = CASE
+liste_mur = []
+liste_mur.append([case_depart[0] - 1, case_depart[1]])
+liste_mur.append([case_depart[0], case_depart[1] - 1])
+liste_mur.append([case_depart[0], case_depart[1] + 1])
+liste_mur.append([case_depart[0] + 1, case_depart[1]])
 
-# Denote walls in maze
-maze[starting_height-1][starting_width] = WALL
-maze[starting_height][starting_width - 1] = WALL
-maze[starting_height][starting_width + 1] = WALL
-maze[starting_height + 1][starting_width] = WALL
+laby[case_depart[0]-1][case_depart[1]] = MUR
+laby[case_depart[0]][case_depart[1] - 1] = MUR
+laby[case_depart[0]][case_depart[1] + 1] = MUR
+laby[case_depart[0] + 1][case_depart[1]] = MUR
 
-while walls:
-    # Pick a random wall
-    rand_wall = walls[randint(-1, len(walls)-1)]
+
+while liste_mur:
+    prochain_mur = choice(liste_mur)
     # Check if it is a left wall
-    if rand_wall[1] != 0:
-        if maze[rand_wall[0]][rand_wall[1]-1] == UNVISITED and maze[rand_wall[0]][rand_wall[1]+1] == CELL:
+    if prochain_mur[1] != 0:
+        if laby[prochain_mur[0]][prochain_mur[1]-1] == PAS_VISITE and laby[prochain_mur[0]][prochain_mur[1]+1] == CASE:
             # Find the number of surrounding cells
-            s_cells = surroundingCells(rand_wall)
+            nb_cases = compter_cellules(prochain_mur)
 
-            if s_cells < 2:
+            if nb_cases < 2:
                 # Denote the new path
-                maze[rand_wall[0]][rand_wall[1]] = CELL
+                laby[prochain_mur[0]][prochain_mur[1]] = CASE
 
-                # Mark the new walls
+                # Mark the new liste_mur
                 # Upper cell
-                if rand_wall[0] != 0:
-                    if maze[rand_wall[0]-1][rand_wall[1]] != CELL:
-                        maze[rand_wall[0]-1][rand_wall[1]] = WALL
-                    if [rand_wall[0]-1, rand_wall[1]] not in walls:
-                        walls.append([rand_wall[0]-1, rand_wall[1]])
+                if prochain_mur[0] != 0:
+                    if laby[prochain_mur[0]-1][prochain_mur[1]] != CASE:
+                        laby[prochain_mur[0]-1][prochain_mur[1]] = MUR
+                    if [prochain_mur[0]-1, prochain_mur[1]] not in liste_mur:
+                        liste_mur.append([prochain_mur[0]-1, prochain_mur[1]])
 
                 # Bottom cell
-                if rand_wall[0] != HEIGHT-1:
-                    if maze[rand_wall[0]+1][rand_wall[1]] != CELL:
-                        maze[rand_wall[0]+1][rand_wall[1]] = WALL
-                    if [rand_wall[0]+1, rand_wall[1]] not in walls:
-                        walls.append([rand_wall[0]+1, rand_wall[1]])
+                if prochain_mur[0] != HEIGHT-1:
+                    if laby[prochain_mur[0]+1][prochain_mur[1]] != CASE:
+                        laby[prochain_mur[0]+1][prochain_mur[1]] = MUR
+                    if [prochain_mur[0]+1, prochain_mur[1]] not in liste_mur:
+                        liste_mur.append([prochain_mur[0]+1, prochain_mur[1]])
 
                 # Leftmost cell
-                if rand_wall[1] != 0:
-                    if maze[rand_wall[0]][rand_wall[1]-1] != CELL:
-                        maze[rand_wall[0]][rand_wall[1]-1] = WALL
-                    if [rand_wall[0], rand_wall[1]-1] not in walls:
-                        walls.append([rand_wall[0], rand_wall[1]-1])
+                if prochain_mur[1] != 0:
+                    if laby[prochain_mur[0]][prochain_mur[1]-1] != CASE:
+                        laby[prochain_mur[0]][prochain_mur[1]-1] = MUR
+                    if [prochain_mur[0], prochain_mur[1]-1] not in liste_mur:
+                        liste_mur.append([prochain_mur[0], prochain_mur[1]-1])
 
             # Delete wall
-            for wall in walls:
-                if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
-                    walls.remove(wall)
+            for wall in liste_mur:
+                if wall[0] == prochain_mur[0] and wall[1] == prochain_mur[1]:
+                    liste_mur.remove(wall)
 
             continue
 
     # Check if it is an upper wall
-    if rand_wall[0] != 0:
-        if maze[rand_wall[0]-1][rand_wall[1]] == UNVISITED and maze[rand_wall[0]+1][rand_wall[1]] == CELL:
+    if prochain_mur[0] != 0:
+        if laby[prochain_mur[0]-1][prochain_mur[1]] == PAS_VISITE and laby[prochain_mur[0]+1][prochain_mur[1]] == CASE:
 
-            s_cells = surroundingCells(rand_wall)
-            if s_cells < 2:
+            nb_cases = compter_cellules(prochain_mur)
+            if nb_cases < 2:
                 # Denote the new path
-                maze[rand_wall[0]][rand_wall[1]] = CELL
+                laby[prochain_mur[0]][prochain_mur[1]] = CASE
 
-                # Mark the new walls
+                # Mark the new liste_mur
                 # Upper cell
-                if rand_wall[0] != 0:
-                    if maze[rand_wall[0]-1][rand_wall[1]] != CELL:
-                        maze[rand_wall[0]-1][rand_wall[1]] = WALL
-                    if [rand_wall[0]-1, rand_wall[1]] not in walls:
-                        walls.append([rand_wall[0]-1, rand_wall[1]])
+                if prochain_mur[0] != 0:
+                    if laby[prochain_mur[0]-1][prochain_mur[1]] != CASE:
+                        laby[prochain_mur[0]-1][prochain_mur[1]] = MUR
+                    if [prochain_mur[0]-1, prochain_mur[1]] not in liste_mur:
+                        liste_mur.append([prochain_mur[0]-1, prochain_mur[1]])
 
                 # Leftmost cell
-                if rand_wall[1] != 0:
-                    if maze[rand_wall[0]][rand_wall[1]-1] != CELL:
-                        maze[rand_wall[0]][rand_wall[1]-1] = WALL
-                    if [rand_wall[0], rand_wall[1]-1] not in walls:
-                        walls.append([rand_wall[0], rand_wall[1]-1])
+                if prochain_mur[1] != 0:
+                    if laby[prochain_mur[0]][prochain_mur[1]-1] != CASE:
+                        laby[prochain_mur[0]][prochain_mur[1]-1] = MUR
+                    if [prochain_mur[0], prochain_mur[1]-1] not in liste_mur:
+                        liste_mur.append([prochain_mur[0], prochain_mur[1]-1])
 
                 # Rightmost cell
-                if rand_wall[1] != WIDTH-1:
-                    if maze[rand_wall[0]][rand_wall[1]+1] != CELL:
-                        maze[rand_wall[0]][rand_wall[1]+1] = WALL
-                    if [rand_wall[0], rand_wall[1]+1] not in walls:
-                        walls.append([rand_wall[0], rand_wall[1]+1])
+                if prochain_mur[1] != WIDTH-1:
+                    if laby[prochain_mur[0]][prochain_mur[1]+1] != CASE:
+                        laby[prochain_mur[0]][prochain_mur[1]+1] = MUR
+                    if [prochain_mur[0], prochain_mur[1]+1] not in liste_mur:
+                        liste_mur.append([prochain_mur[0], prochain_mur[1]+1])
 
             # Delete wall
-            for wall in walls:
-                if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
-                    walls.remove(wall)
+            for e in liste_mur:
+                if e[0] == prochain_mur[0] and e[1] == prochain_mur[1]:
+                    liste_mur.remove(e)
 
             continue
 
     # Check the bottom wall
-    if rand_wall[0] != HEIGHT-1:
-        if maze[rand_wall[0]+1][rand_wall[1]] == UNVISITED and maze[rand_wall[0]-1][rand_wall[1]] == CELL:
+    if prochain_mur[0] != HEIGHT-1:
+        if laby[prochain_mur[0]+1][prochain_mur[1]] == PAS_VISITE and laby[prochain_mur[0]-1][prochain_mur[1]] == CASE:
 
-            s_cells = surroundingCells(rand_wall)
-            if s_cells < 2:
+            nb_cases = compter_cellules(prochain_mur)
+            if nb_cases < 2:
                 # Denote the new path
-                maze[rand_wall[0]][rand_wall[1]] = CELL
+                laby[prochain_mur[0]][prochain_mur[1]] = CASE
 
-                # Mark the new walls
-                if rand_wall[0] != HEIGHT-1:
-                    if maze[rand_wall[0]+1][rand_wall[1]] != CELL:
-                        maze[rand_wall[0]+1][rand_wall[1]] = WALL
-                    if [rand_wall[0]+1, rand_wall[1]] not in walls:
-                        walls.append([rand_wall[0]+1, rand_wall[1]])
-                if rand_wall[1] != 0:
-                    if maze[rand_wall[0]][rand_wall[1]-1] != CELL:
-                        maze[rand_wall[0]][rand_wall[1]-1] = WALL
-                    if [rand_wall[0], rand_wall[1]-1] not in walls:
-                        walls.append([rand_wall[0], rand_wall[1]-1])
-                if rand_wall[1] != WIDTH-1:
-                    if maze[rand_wall[0]][rand_wall[1]+1] != CELL:
-                        maze[rand_wall[0]][rand_wall[1]+1] = WALL
-                    if [rand_wall[0], rand_wall[1]+1] not in walls:
-                        walls.append([rand_wall[0], rand_wall[1]+1])
+                # Mark the new liste_mur
+                if prochain_mur[0] != HEIGHT-1:
+                    if laby[prochain_mur[0]+1][prochain_mur[1]] != CASE:
+                        laby[prochain_mur[0]+1][prochain_mur[1]] = MUR
+                    if [prochain_mur[0]+1, prochain_mur[1]] not in liste_mur:
+                        liste_mur.append([prochain_mur[0]+1, prochain_mur[1]])
+                if prochain_mur[1] != 0:
+                    if laby[prochain_mur[0]][prochain_mur[1]-1] != CASE:
+                        laby[prochain_mur[0]][prochain_mur[1]-1] = MUR
+                    if [prochain_mur[0], prochain_mur[1]-1] not in liste_mur:
+                        liste_mur.append([prochain_mur[0], prochain_mur[1]-1])
+                if prochain_mur[1] != WIDTH-1:
+                    if laby[prochain_mur[0]][prochain_mur[1]+1] != CASE:
+                        laby[prochain_mur[0]][prochain_mur[1]+1] = MUR
+                    if [prochain_mur[0], prochain_mur[1]+1] not in liste_mur:
+                        liste_mur.append([prochain_mur[0], prochain_mur[1]+1])
 
             # Delete wall
-            for wall in walls:
-                if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
-                    walls.remove(wall)
+            for wall in liste_mur:
+                if wall[0] == prochain_mur[0] and wall[1] == prochain_mur[1]:
+                    liste_mur.remove(wall)
 
             continue
 
     # Check the right wall
-    if rand_wall[1] != WIDTH-1:
-        if maze[rand_wall[0]][rand_wall[1]+1] == UNVISITED and maze[rand_wall[0]][rand_wall[1]-1] == CELL:
+    if prochain_mur[1] != WIDTH-1:
+        if laby[prochain_mur[0]][prochain_mur[1]+1] == PAS_VISITE and laby[prochain_mur[0]][prochain_mur[1]-1] == CASE:
 
-            s_cells = surroundingCells(rand_wall)
-            if s_cells < 2:
+            nb_cases = compter_cellules(prochain_mur)
+            if nb_cases < 2:
                 # Denote the new path
-                maze[rand_wall[0]][rand_wall[1]] = CELL
+                laby[prochain_mur[0]][prochain_mur[1]] = CASE
 
-                # Mark the new walls
-                if rand_wall[1] != WIDTH-1:
-                    if maze[rand_wall[0]][rand_wall[1]+1] != CELL:
-                        maze[rand_wall[0]][rand_wall[1]+1] = WALL
-                    if [rand_wall[0], rand_wall[1]+1] not in walls:
-                        walls.append([rand_wall[0], rand_wall[1]+1])
-                if rand_wall[0] != HEIGHT-1:
-                    if maze[rand_wall[0]+1][rand_wall[1]] != CELL:
-                        maze[rand_wall[0]+1][rand_wall[1]] = WALL
-                    if [rand_wall[0]+1, rand_wall[1]] not in walls:
-                        walls.append([rand_wall[0]+1, rand_wall[1]])
-                if rand_wall[0] != 0:
-                    if maze[rand_wall[0]-1][rand_wall[1]] != CELL:
-                        maze[rand_wall[0]-1][rand_wall[1]] = WALL
-                    if [rand_wall[0]-1, rand_wall[1]] not in walls:
-                        walls.append([rand_wall[0]-1, rand_wall[1]])
+                # Mark the new liste_mur
+                if prochain_mur[1] != WIDTH-1:
+                    if laby[prochain_mur[0]][prochain_mur[1]+1] != CASE:
+                        laby[prochain_mur[0]][prochain_mur[1]+1] = MUR
+                    if [prochain_mur[0], prochain_mur[1]+1] not in liste_mur:
+                        liste_mur.append([prochain_mur[0], prochain_mur[1]+1])
+                if prochain_mur[0] != HEIGHT-1:
+                    if laby[prochain_mur[0]+1][prochain_mur[1]] != CASE:
+                        laby[prochain_mur[0]+1][prochain_mur[1]] = MUR
+                    if [prochain_mur[0]+1, prochain_mur[1]] not in liste_mur:
+                        liste_mur.append([prochain_mur[0]+1, prochain_mur[1]])
+                if prochain_mur[0] != 0:
+                    if laby[prochain_mur[0]-1][prochain_mur[1]] != CASE:
+                        laby[prochain_mur[0]-1][prochain_mur[1]] = MUR
+                    if [prochain_mur[0]-1, prochain_mur[1]] not in liste_mur:
+                        liste_mur.append([prochain_mur[0]-1, prochain_mur[1]])
 
             # Delete wall
-            for wall in walls:
-                if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
-                    walls.remove(wall)
+            for wall in liste_mur:
+                if wall[0] == prochain_mur[0] and wall[1] == prochain_mur[1]:
+                    liste_mur.remove(wall)
 
             continue
 
     # Delete the wall from the list anyway
-    for wall in walls:
-        if wall[0] == rand_wall[0] and wall[1] == rand_wall[1]:
-            walls.remove(wall)
+    for wall in liste_mur:
+        if wall[0] == prochain_mur[0] and wall[1] == prochain_mur[1]:
+            liste_mur.remove(wall)
 
 
-# Mark the remaining unvisited cells as walls
+# Mark the remaining unvisited cells as liste_mur
 for i in range(0, HEIGHT):
     for j in range(0, WIDTH):
-        if maze[i][j] == UNVISITED:
-            maze[i][j] = WALL
+        if laby[i][j] == PAS_VISITE:
+            laby[i][j] = MUR
 
 # Set entrance and exit
 for i in range(0, WIDTH):
-    if maze[1][i] == CELL:
-        maze[0][i] = CELL
+    if laby[1][i] == CASE:
+        laby[0][i] = CASE
         break
 
 for i in range(WIDTH-1, 0, -1):
-    if maze[HEIGHT-2][i] == CELL:
-        maze[HEIGHT-1][i] = CELL
+    if laby[HEIGHT-2][i] == CASE:
+        laby[HEIGHT-1][i] = CASE
         break
 
-print(maze)
+print(laby)
