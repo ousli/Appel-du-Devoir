@@ -8,7 +8,7 @@ mouse.traverse_target = shootables_parent
 class Enemy(Entity):
 
     def __init__(self, **kwargs):
-        super().__init__(parent=shootables_parent, model='models/r2-d2.obj', scale=.015,
+        super().__init__(parent=shootables_parent, model='models/r2-d2.obj', scale=.010,
                          origin_y=0, texture="textures/R2D2_Diffuse.jpg", collider='box', shader=colored_lights_shader, **kwargs)
         self.health_bar = Entity(
             parent=self, y=175, model='cube', color=color.red, world_scale=(1.5, .1, .1))
