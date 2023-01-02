@@ -51,13 +51,16 @@ def restart():
     subprocess.call(['python', 'main.py'])
 
 
-menu_panel = Panel(scale=(2, 2), visible=False,
+menu_panel = Panel(scale=(2, 2), visible=True,
                    color=color.rgba(0, 0, 0, 50))
 
 game_over = Text('GAME OVER !', parent=menu_panel,
                  origin=(0, 0), y=0.1, scale_override=2)
 retour_au_mennu = Button(
     'Retour au menu', scale=(0.25, 0.055), parent=menu_panel, on_click=restart)
+
+quit = Button(
+    'Quitter', scale=(0.25, 0.055), y=-0.1, parent=menu_panel, on_click=application.quit)
 
 
 # titre = Text('Niveau ' + str(current_level.get_level())8
