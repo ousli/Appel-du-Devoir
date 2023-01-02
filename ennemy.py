@@ -27,7 +27,8 @@ class Enemy(Entity):
                            self.forward, 30, ignore=(self,))
         if hit_info.entity == self.player:
             if dist > 2:
-                self.position += self.forward * time.dt * 50
+                self.position += self.forward * \
+                    time.dt * (50 + self.difficulty/3)
             else:
                 # player.hp -= 10
 
