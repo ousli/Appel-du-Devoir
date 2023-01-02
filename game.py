@@ -22,7 +22,7 @@ ground = Entity(model='plane', collider='box', scale=120,
 
 
 player = FirstPersonController(
-    model='cube', color=color.rgba(255, 255, 255, 0), origin_y=-.5, speed=8, hp=10, scale_y=1,
+    model='cube', color=color.rgba(255, 255, 255, 0), origin_y=-.5, speed=8, hp=100, scale_y=1,
     health_bar=HealthBar(bar_color=color.lime.tint(-.25),
                          roundness=.5, value=100, show_text=False, show_lines=False), collider="box")
 
