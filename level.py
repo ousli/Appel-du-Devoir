@@ -14,7 +14,8 @@ class Level:
         self._enemies = []
         self._player = player
         self._player_spawn = None
-        self._level = 10
+        self._level = 1
+        self._score = 0
         self.generate_labyrinthe()
 
     def generate_labyrinthe(self):
@@ -79,3 +80,9 @@ class Level:
 
     def set_level(self, level):
         self._level = level
+
+    def get_score(self):
+        return self._score
+
+    def set_score(self, score):
+        self._score = score

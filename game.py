@@ -10,6 +10,7 @@ app = Ursina()
 # window.editor_ui.enabled = True
 # window.fullscreen = True
 window.title = "Appel du Devoir"
+# window.fps_counter.enabled = False
 
 
 # Entity.default_shader = noise_fog_shader
@@ -32,12 +33,16 @@ gun = Entity(model='models/Gun.obj', parent=camera, position=(.5, -.25, .5),
              rotation=(0, -100, 0), texture="textures/gun.png", on_cooldown=False, nb_balle=8)
 
 
-num_level = Text("Niveau " + str(current_level.get_level()),
+num_level = Text("Niveau : " + str(current_level.get_level()),
                  scale_override=1.5, origin=(0, 0), x=-0.75, y=-0.45)
 
 
 nb_balle_text = Text(str(gun.nb_balle) + "/8", '', '',
                      True, origin=(14.7, -17.3), scale_override=1.5)
+
+
+score_text = Text("Score : " + str(current_level.get_score()),
+                  scale_override=1, origin=(0, 0), x=0.75, y=0.45)
 
 
 # titre = Text('Niveau ' + str(current_level.get_level())8
@@ -54,7 +59,8 @@ def input(key):
 
 def update():
     nb_balle_text.text = str(gun.nb_balle) + "/8"
-    num_level.text = "Niveau " + str(current_level.get_level())
+    num_level.text = "Niveau : " + str(current_level.get_level())
+    score_text.text = "Score : " + str(current_level.get_score())
 
     if player.hp <= 0:
         print('Game Over')
@@ -72,10 +78,13 @@ def update():
 
         current_level.set_level(current_level.get_level() + 1)
 
-        destroy(Text("Niveau Suivant !", scale_override=1.5), delay=2)
+        destroy(Text("Niveau Suivant !", scale_override=2, origin=(0, 0)),
+                delay=2)
 
         current_level.generate_labyrinthe()
         player.hp = 100
+        player.health_bar.value = player.hp
+        current_level.set_score(current_level.get_score()+1000)
         player.x, player.z = current_level.get_player_spawn()
         player.look_at(player, axis='left')
 
@@ -87,6 +96,8 @@ def shoot():
         invoke(setattr, gun, 'on_cooldown', False, delay=.5)
         gun.nb_balle -= 1
         if mouse.hovered_entity and hasattr(mouse.hovered_entity, 'hp'):
+            if mouse.hovered_entity.hp - 20 == 0:
+                current_level.set_score(current_level.get_score()+100)
             mouse.hovered_entity.hp -= 20
             mouse.hovered_entity.blink(color.red)
 

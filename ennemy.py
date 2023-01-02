@@ -23,17 +23,19 @@ class Enemy(Entity):
         self.health_bar.alpha = max(0, self.health_bar.alpha - time.dt)
 
         self.look_at_2d(self.player.position, 'y')
-        hit_info = raycast(self.world_position + Vec3(0, 1, 0),
-                           self.forward, 30, ignore=(self,))
-        if hit_info.entity == self.player:
-            if dist > 2:
-                self.position += self.forward * \
-                    time.dt * (50 + self.difficulty/3)
-            else:
-                # player.hp -= 10
-
-                invoke(setattr, self.player, 'hp', self.player.hp-10, delay=.8)
-                self.player.health_bar.value = self.player.hp
+        player_info = raycast(self.world_position + Vec3(0, 1, 0),
+                              self.forward, 30, ignore=(self,), traverse_target=self.player)
+        if player_info.hit:
+            hit_info = raycast(self.world_position + Vec3(0, 1, 0),
+                               self.forward, 30, ignore=(self,))
+            if hit_info.entity == self.player:
+                if dist > 2:
+                    self.position += self.forward * \
+                        time.dt * (50 + self.difficulty/3)
+                else:
+                    invoke(setattr, self.player, 'hp',
+                           self.player.hp-10, delay=.8)
+                    self.player.health_bar.value = self.player.hp
 
     @property
     def hp(self):
