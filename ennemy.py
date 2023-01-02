@@ -31,7 +31,7 @@ class Enemy(Entity):
             if hit_info.entity == self.player:
                 if dist > 2:
                     self.position += self.forward * \
-                        time.dt * (50 + self.difficulty/3)
+                        time.dt * (50 + self.difficulty)
                 else:
                     invoke(setattr, self.player, 'hp',
                            self.player.hp-10, delay=.8)

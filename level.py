@@ -1,8 +1,8 @@
 from ursina import *
-import ennemy
 from random import randint
 from ursina.shaders import basic_lighting_shader
 import labyrinthe
+import ennemy
 
 
 class Level:
@@ -32,8 +32,13 @@ class Level:
                                color=color.hsv(0, 0, random.uniform(.9, 1)), shader=basic_lighting_shader
                                ))
                 if map.get_map()[i][j] == 0:
-                    la_proba_quil_y_est_un_ennemis = randint(0, 10)
-                    if la_proba_quil_y_est_un_ennemis == 3:
+                    if self._level < 20:
+                        la_proba_quil_y_est_un_ennemis = randint(0, 10)
+                    elif self._level < 40:
+                        la_proba_quil_y_est_un_ennemis = randint(0, 5)
+                    else:
+                        la_proba_quil_y_est_un_ennemis = randint(0, 2)
+                    if la_proba_quil_y_est_un_ennemis == 2:
                         self._enemies.append(ennemy.Enemy(
                             player=self._player, difficulty=self._level, x=i*2, z=j*2))
                 if map.get_map()[i][j] == 3:

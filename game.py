@@ -1,8 +1,10 @@
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.prefabs.health_bar import HealthBar
-
+from ursina.shaders import lit_with_shadows_shader
 import level
+import subprocess
+
 
 app = Ursina()
 
@@ -14,17 +16,16 @@ window.title = "Appel du Devoir"
 
 
 # Entity.default_shader = noise_fog_shader
-
+Entity.default_shader = lit_with_shadows_shader
 ground = Entity(model='plane', collider='box', scale=120,
                 texture='grass', texture_scale=(10, 10))
 
 
 player = FirstPersonController(
-    model='cube', color=color.rgba(255, 255, 255, 0), origin_y=-.5, speed=8, hp=100,
+    model='cube', color=color.rgba(255, 255, 255, 0), origin_y=-.5, speed=8, hp=10, scale_y=1,
     health_bar=HealthBar(bar_color=color.lime.tint(-.25),
-                         roundness=.5, value=100, show_text=False, show_lines=False))
+                         roundness=.5, value=100, show_text=False, show_lines=False), collider="box")
 
-player.collider = BoxCollider(player, Vec3(0, 1, 0), Vec3(1, 2, 1))
 current_level = level.Level(player)
 player.x, player.z = current_level.get_player_spawn()
 player.look_at(player, axis='left')
@@ -45,6 +46,20 @@ score_text = Text("Score : " + str(current_level.get_score()),
                   scale_override=1, origin=(0, 0), x=0.75, y=0.45)
 
 
+def restart():
+    application.quit()
+    subprocess.call(['python', 'main.py'])
+
+
+menu_panel = Panel(scale=(2, 2), visible=False,
+                   color=color.rgba(0, 0, 0, 50))
+
+game_over = Text('GAME OVER !', parent=menu_panel,
+                 origin=(0, 0), y=0.1, scale_override=2)
+retour_au_mennu = Button(
+    'Retour au menu', scale=(0.25, 0.055), parent=menu_panel, on_click=restart)
+
+
 # titre = Text('Niveau ' + str(current_level.get_level())8
 #              '', '', True, scale_override=10)
 
@@ -57,13 +72,27 @@ def input(key):
         invoke(setattr, gun, 'nb_balle', 8, delay=3)
 
 
+editor_camera = EditorCamera(enabled=False, ignore_paused=True)
+
+
 def update():
     nb_balle_text.text = str(gun.nb_balle) + "/8"
     num_level.text = "Niveau : " + str(current_level.get_level())
     score_text.text = "Score : " + str(current_level.get_score())
 
     if player.hp <= 0:
-        print('Game Over')
+        # print('Game Over')
+        editor_camera.enabled = not editor_camera.enabled
+
+        player.visible_self = editor_camera.enabled
+        player.cursor.enabled = not editor_camera.enabled
+        gun.enabled = not editor_camera.enabled
+        mouse.locked = not editor_camera.enabled
+        editor_camera.position = player.position
+
+        application.paused = editor_camera.enabled
+
+        menu_panel.visible = True
 
     if player.intersects(current_level.get_sortie()).hit:
 
@@ -104,7 +133,7 @@ def shoot():
 
 sun = DirectionalLight()
 sun.look_at(Vec3(1, -1, -1))
-# scene.fog_density = .1
-# scene.fog_color = color.black
-Sky()
+scene.fog_density = .2
+scene.fog_color = color.black
+Sky(texture='sky_sunset')
 app.run()
