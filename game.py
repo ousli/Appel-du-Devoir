@@ -21,6 +21,7 @@ ground = Entity(model='plane', collider='box', scale=120,
                 texture='grass', texture_scale=(10, 10))
 
 
+# Création d'un objet joueur avec une barre de santé et un collisionneur.
 player = FirstPersonController(
     model='cube', color=color.rgba(255, 255, 255, 0), origin_y=-.5, speed=8, hp=100, scale_y=1,
     health_bar=HealthBar(bar_color=color.lime.tint(-.25),
@@ -47,6 +48,9 @@ score_text = Text("Score : " + str(current_level.get_score()),
 
 
 def restart():
+    """
+    Il ferme l'application en cours puis en ouvre une nouvelle
+    """
     application.quit()
     subprocess.call(['python', 'main.py'])
 
@@ -68,6 +72,11 @@ quit = Button(
 
 
 def input(key):
+    """
+    Lorsque le bouton gauche de la souris est enfoncé, la fonction shoot() est appelée
+
+    :param key: la touche qui a été enfoncée
+    """
     if key == 'left mouse down':
         shoot()
     if key == 'r' and gun.nb_balle < 8:
@@ -79,6 +88,10 @@ editor_camera = EditorCamera(enabled=False, ignore_paused=True)
 
 
 def update():
+    """
+    Il met à jour le texte des éléments de l'interface utilisateur, vérifie si le joueur est mort, et si
+    le joueur est mort, il met le jeu en pause et affiche le menu
+    """
     nb_balle_text.text = str(gun.nb_balle) + "/8"
     num_level.text = "Niveau : " + str(current_level.get_level())
     score_text.text = "Score : " + str(current_level.get_score())
@@ -122,6 +135,9 @@ def update():
 
 
 def shoot():
+    """
+    Il tire le pistolet s'il n'est pas en recharge et s'il y a encore des balles dedans
+    """
     if not gun.on_cooldown and gun.nb_balle > 0:
         gun.on_cooldown = True
         Audio("sounds/gun.mp3", True, False)
@@ -134,6 +150,7 @@ def shoot():
             mouse.hovered_entity.blink(color.red)
 
 
+# Création d'une lumière directionnelle et réglage de la densité et de la couleur du brouillard.
 sun = DirectionalLight()
 sun.look_at(Vec3(1, -1, -1))
 scene.fog_density = .2

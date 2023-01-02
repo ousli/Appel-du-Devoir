@@ -1,16 +1,13 @@
 import tkinter as tk
-
 import subprocess
-# Création de la fenêtre principale
-# window = tk.Tk()
 
 
 class Menu(tk.Tk):
-    def __init__(self, score):
-        if score:
-            self._score = score
-        else:
-            self._score = 0
+    def __init__(self):
+        """
+        Il crée un menu pour le jeu.
+        """
+
         super().__init__()
 
         self.title("Appel du Devoir")
@@ -24,9 +21,6 @@ class Menu(tk.Tk):
             'Verdana', 24), bg='#3498db', fg='#ecf0f1')
         self.title.place(relx=0.5, rely=0.1, anchor='n')
 
-        self.best_score = tk.Label(self.canvas, text='Meilleur score:' + str(self._score), font=(
-            'Verdana', 24), bg='#3498db', fg='#ecf0f1')
-        self.best_score.place(relx=0.5, rely=0.2, anchor='n')
         # Bouton pour lancer la partie
         self.play_button = tk.Button(self.canvas, text='Jouer', font=('Verdana', 16), bg='#2ecc71', fg='#ecf0f1',
                                      activebackground='#27ae60', activeforeground='#ecf0f1', width=10, command=self.start_game)
@@ -38,13 +32,19 @@ class Menu(tk.Tk):
         self.quit_button.place(relx=0.5, rely=0.5, anchor='n')
 
     def start_game(self):
+        """
+        Il détruit la fenêtre actuelle et ouvre une nouvelle fenêtre appelée game.py.
+        """
         self.destroy()
         subprocess.call(['python', 'game.py'])
 
     def quit_game(self):
+        """
+        Il détruit la fenêtre
+        """
         self.destroy()
 
 
-# window.mainloop()
-menu = Menu(0)
+# Créer une nouvelle instance de la classe Menu, puis appeler la méthode mainloop dessus.
+menu = Menu()
 menu.mainloop()

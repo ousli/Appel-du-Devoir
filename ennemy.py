@@ -8,6 +8,10 @@ mouse.traverse_target = shootables_parent
 class Enemy(Entity):
 
     def __init__(self, **kwargs):
+        """
+        La fonction crée une nouvelle entité, qui est une sous-classe de la classe Entity, et définit le
+        parent de l'entité sur l'entité shootables_parent, qui est une sous-classe de la classe Entity
+        """
         super().__init__(parent=shootables_parent, model='models/r2-d2.obj', scale=.010,
                          origin_y=0, texture="textures/R2D2_Diffuse.jpg", collider='box', shader=colored_lights_shader, **kwargs)
         self.health_bar = Entity(
@@ -16,6 +20,13 @@ class Enemy(Entity):
         self.hp = self.max_hp
 
     def update(self):
+        """
+        Si le joueur est à moins de 100 unités de l'ennemi, l'ennemi regardera le joueur et si le joueur
+        est à moins de 30 unités de l'ennemi, l'ennemi se déplacera vers le joueur. Si le joueur est à
+        moins de 2 unités de l'ennemi, l'ennemi infligera 10 dégâts au joueur
+        :return: La valeur de retour est le résultat de la dernière expression dans le corps de la
+        fonction.
+        """
         dist = distance_xz(self.player.position, self.position)
         if dist > 100:
             return
@@ -39,10 +50,21 @@ class Enemy(Entity):
 
     @property
     def hp(self):
+        """
+        La fonction hp() retourne la valeur de la variable _hp
+        :return: La valeur de l'attribut hp.
+        """
         return self._hp
 
     @hp.setter
     def hp(self, value):
+        """
+        Il définit la valeur de la variable _hp sur la valeur de la variable value, et si la valeur de
+        la variable value est inférieure ou égale à 0, il détruit l'objet et renvoie
+
+        :param value: La valeur du ch
+        :return: La valeur de l'attribut hp.
+        """
         self._hp = value
         if value <= 0:
             destroy(self)

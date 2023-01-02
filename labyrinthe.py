@@ -4,6 +4,12 @@ from random import choice, randint
 class Labyrinthe:
 
     def __init__(self, width, height):
+        """
+        Il crée un tableau 2D de taille largeur x hauteur et le remplit avec la valeur 2.
+
+        :param width: la largeur du labyrinthe
+        :param height: la hauteur du labyrinthe
+        """
         self._width = width
         self._height = height
         self._mur = 1
@@ -16,6 +22,12 @@ class Labyrinthe:
         self.generate()
 
     def compter_cellules(self, prochain_mur):
+        """
+        Il compte le nombre de cellules autour d'une cellule donnée
+
+        :param prochain_mur: le prochain mur à briser
+        :return: Le nombre de cellules autour du mur suivant.
+        """
         nb_cases = 0
         if self._laby[prochain_mur[0]-1][prochain_mur[1]] == self._case:
             nb_cases += 1
@@ -29,6 +41,11 @@ class Labyrinthe:
         return nb_cases
 
     def generate(self):
+        """
+        Il génère un labyrinthe en choisissant au hasard un mur et en vérifiant s'il a moins de deux
+        cellules adjacentes. Si c'est le cas, il supprime le mur et ajoute les murs adjacents à une
+        liste
+        """
 
         case_depart = (randint(1, self._height-2), randint(1, self._width-2))
 
@@ -213,4 +230,8 @@ class Labyrinthe:
                 break
 
     def get_map(self):
+        """
+        Il renvoie la carte du labyrinthe
+        :return: La carte du labyrinthe.
+        """
         return self._laby
