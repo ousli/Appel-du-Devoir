@@ -32,8 +32,9 @@ gun = Entity(model='models/Gun.obj', parent=camera, position=(.5, -.25, .5),
              rotation=(0, -100, 0), texture="textures/gun.png", on_cooldown=False, nb_balle=8)
 
 
-num_level = Text("Niveau " + str(current_level.get_level()), '', '',
-                 True, origin=(5, 17.3), scale_override=1.5)
+num_level = Text("Niveau " + str(current_level.get_level()),
+                 scale_override=1.5, origin=(0, 0), x=-0.75, y=-0.45)
+
 
 nb_balle_text = Text(str(gun.nb_balle) + "/8", '', '',
                      True, origin=(14.7, -17.3), scale_override=1.5)
