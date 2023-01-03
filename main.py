@@ -10,14 +10,14 @@ class Menu(tk.Tk):
 
         super().__init__()
 
-        self.title("Appel du Devoir")
+        self.title("L'Appel du Devoir")
 
         # Création du canvas
         self.canvas = tk.Canvas(self, bg='#3498db', height=600, width=800)
         self.canvas.pack()
 
         # Titre du menu
-        self.title = tk.Label(self.canvas, text='Appel du Devoir', font=(
+        self.title = tk.Label(self.canvas, text='L\'Appel du Devoir', font=(
             'Verdana', 24), bg='#3498db', fg='#ecf0f1')
         self.title.place(relx=0.5, rely=0.1, anchor='n')
 

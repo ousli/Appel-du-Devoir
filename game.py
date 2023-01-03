@@ -55,7 +55,7 @@ def restart():
     subprocess.call(['python', 'main.py'])
 
 
-menu_panel = Panel(scale=(2, 2), visible=True,
+menu_panel = Panel(scale=(2, 2), enabled=False,
                    color=color.rgba(0, 0, 0, 50))
 
 game_over = Text('GAME OVER !', parent=menu_panel,
@@ -108,7 +108,7 @@ def update():
 
         application.paused = editor_camera.enabled
 
-        menu_panel.visible = True
+        menu_panel.enabled = True
 
     if player.intersects(current_level.get_sortie()).hit:
 
