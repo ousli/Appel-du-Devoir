@@ -8,14 +8,9 @@ import subprocess
 
 app = Ursina()
 
-# window.borderless = True
-# window.editor_ui.enabled = True
-# window.fullscreen = True
 window.title = "Appel du Devoir"
-# window.fps_counter.enabled = False
 
 
-# Entity.default_shader = noise_fog_shader
 Entity.default_shader = lit_with_shadows_shader
 ground = Entity(model='plane', collider='box', scale=120,
                 texture='grass', texture_scale=(10, 10))
@@ -67,10 +62,6 @@ quit = Button(
     'Quitter', scale=(0.25, 0.055), y=-0.1, parent=menu_panel, on_click=application.quit)
 
 
-# titre = Text('Niveau ' + str(current_level.get_level())8
-#              '', '', True, scale_override=10)
-
-
 def input(key):
     """
     Lorsque le bouton gauche de la souris est enfoncé, la fonction shoot() est appelée
@@ -97,17 +88,13 @@ def update():
     score_text.text = "Score : " + str(current_level.get_score())
 
     if player.hp <= 0:
-        # print('Game Over')
         editor_camera.enabled = not editor_camera.enabled
-
         player.visible_self = editor_camera.enabled
         player.cursor.enabled = not editor_camera.enabled
         gun.enabled = not editor_camera.enabled
         mouse.locked = not editor_camera.enabled
         editor_camera.position = player.position
-
         application.paused = editor_camera.enabled
-
         menu_panel.enabled = True
 
     if player.intersects(current_level.get_sortie()).hit:

@@ -100,6 +100,8 @@ class Labyrinthe:
 
                     continue
 
+            # Vérifier si le mur suivant n'est pas en haut du labyrinthe, et si la cellule au-dessus
+            # et en dessous du mur suivant n'est pas visitée et n'est pas un mur.
             if prochain_mur[0] != 0:
                 if self._laby[prochain_mur[0]-1][prochain_mur[1]] == self._pas_visite and self._laby[prochain_mur[0]+1][prochain_mur[1]] == self._case:
 
@@ -138,6 +140,8 @@ class Labyrinthe:
 
                     continue
 
+            # Vérifier si le mur suivant n'est pas au fond du labyrinthe, et si la cellule en dessous
+            # du mur n'est pas visitée et la cellule au dessus du mur est un cas.
             if prochain_mur[0] != self._height-1:
                 if self._laby[prochain_mur[0]+1][prochain_mur[1]] == self._pas_visite and self._laby[prochain_mur[0]-1][prochain_mur[1]] == self._case:
 
@@ -174,6 +178,11 @@ class Labyrinthe:
 
                     continue
 
+            # Vérifier si le mur suivant n'est pas au bout de la largeur du labyrinthe. Si ce n'est
+            # pas le cas, il vérifie si la cellule à droite du mur n'est pas visitée et si la cellule
+            # à gauche du mur est un cas. Si c'est le cas, il compte le nombre de cellules autour du
+            # mur. Si le nombre de cellules est inférieur à 2, il fait du mur un cas et ajoute les
+            # cellules autour du mur à la liste des murs.
             if prochain_mur[1] != self._width-1:
                 if self._laby[prochain_mur[0]][prochain_mur[1]+1] == self._pas_visite and self._laby[prochain_mur[0]][prochain_mur[1]-1] == self._case:
 
