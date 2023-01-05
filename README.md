@@ -18,4 +18,9 @@ Vous êtes le seul à pouvoir les stopper, pour se faire vous devrez résoudre l
 3. `pip install ursina`
 4. Lancer le fichier `main.py` directement dans le dossier du jeu (ou ouvrir le dossier entier sur VSCode, pas le fichier seul, puis après lancer le fichier)
 
+### Touches :
+         | z |
+    | q || s || d |
+    _______________
+    |   Espace    |
 ![alt](screenshot.png)
